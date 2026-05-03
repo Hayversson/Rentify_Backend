@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Rentify.API/Rentify.API.csproj" />
+  <Project Path="Rentify.DataAccess/Rentify.DataAccess.csproj" />
+  <Project Path="Rentify.Domain/Rentify.Domain.csproj" />
+</Solution>
