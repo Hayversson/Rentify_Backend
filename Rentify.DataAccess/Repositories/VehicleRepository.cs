@@ -41,10 +41,10 @@ namespace Rentify.DataAccess.Repositories
 
         }
 
-        public async Task<IEnumerable<Vehicle>> GetByTypeIdAsync(int typeId)
+        public async Task<IEnumerable<Vehicle>> GetByTypeIdAsync(int vehicleTypeId)
         {
             return await _dbSet
-                .Where(v => v.VehicleTypeId == typeId)
+                .Where(v => v.VehicleTypeId == vehicleTypeId)
                 .ToListAsync();
         }
 

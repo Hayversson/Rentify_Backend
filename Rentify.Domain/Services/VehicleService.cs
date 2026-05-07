@@ -152,14 +152,20 @@ namespace Rentify.Domain.Services
             var vehicle = await _vehicleRepository.GetByIdAsync(id);
             if (vehicle == null)
                 throw new KeyNotFoundException($"No se encontró el vehículo con ID {id}");
+
+            // No permitir manejar mantenimiento desde aquí
+            if (newStatus == VehicleStatus.InMaintenance)
+            {
+                throw new InvalidOperationException(
+                    "El estado 'InMaintenance' solo puede cambiarse desde el servicio de mantenimientos");
+            }
+
             // Validar transiciones válidas
             var validTransition = (vehicle.Status, newStatus) switch
             {
-                (VehicleStatus.Available, VehicleStatus.InMaintenance) => true,
                 (VehicleStatus.InMaintenance, VehicleStatus.Available) => true,
                 (VehicleStatus.Available, VehicleStatus.Rented) => true,
                 (VehicleStatus.Rented, VehicleStatus.Available) => true,
-                (VehicleStatus.Rented, VehicleStatus.InMaintenance) => true,
                 _ => false
             };
 

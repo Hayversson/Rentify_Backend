@@ -99,5 +99,16 @@ namespace Rentify.API.Controllers
             }
         }
 
+        [HttpGet("{id}/vehicles")]
+        public async Task<IActionResult> GetVehiclesByType(int id)
+        {
+            var vehicles = await _vehicleTypeService
+                .GetVehiclesByTypeAsync(id);
+
+            var response = _mapper.Map<IEnumerable<VehicleResponseDTO>>(vehicles);
+
+            return Ok(response);
+        }
+
     }
 }

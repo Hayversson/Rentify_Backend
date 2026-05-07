@@ -129,5 +129,21 @@ namespace Rentify.Domain.Services
             await _typeRepository.DeleteAsync(id);
         }
         #endregion
+
+        #region GetVehiclesByTypeAsync
+        public async Task<IEnumerable<Vehicle>> GetVehiclesByTypeAsync(int vehicleTypeId)
+        {
+            var vehicleType = await _typeRepository.GetByIdAsync(vehicleTypeId);
+
+            if (vehicleType == null)
+            {
+                throw new KeyNotFoundException(
+                    $"No se encontró el tipo de vehículo con ID {vehicleTypeId}");
+            }
+
+            return await _vehicleRepository.GetByTypeIdAsync(vehicleTypeId);
+        }
+        #endregion
+
     }
 }
