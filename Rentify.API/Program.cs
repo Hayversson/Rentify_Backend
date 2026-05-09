@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rentify.DataAccess.Context;
-//using Rentify.DataAccess.Seeders;
 //using Rentify.Domain.Helpers;
+using Rentify.DataAccess.Seeders;
 using Rentify.DataAccess.Repositories;
 using Rentify.Domain.Interfaces.Repositories;
 using Rentify.Domain.Interfaces.Services;
@@ -46,14 +46,14 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // ── Data Seeder ──
-/*using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
+using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
 {
     var context = scope.ServiceProvider
         .GetRequiredService<RentifyDbContext>();
 
     await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
     await DataSeeder.SeedAsync(context);
-}*/
+}
 
 
 // ── Middleware Pipeline ──

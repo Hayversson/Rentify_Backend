@@ -9,6 +9,7 @@ namespace Rentify.Domain.Interfaces.Services
         Task<Vehicle?> GetByIdAsync(int id);
         Task<Vehicle> CreateAsync(Vehicle vehicle);
         Task UpdateAsync(int id, Vehicle vehicle);
+        Task<IEnumerable<Vehicle>> GetByStatusAsync(VehicleStatus status);
         Task DeleteAsync(int id);
         Task UpdateStatusAsync(int id, VehicleStatus newStatus);
     }

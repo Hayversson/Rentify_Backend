@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rentify.API.DTOs.Request;
 using Rentify.API.DTOs.Response;
 using Rentify.Domain.Entities;
+using Rentify.Domain.Enums;
 using Rentify.Domain.Interfaces.Services;
 
 namespace Rentify.API.Controllers
@@ -109,6 +110,13 @@ namespace Rentify.API.Controllers
             }
             catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
             catch (InvalidOperationException ex) { return Conflict(new { message = ex.Message }); }
+        }
+
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> GetByStatus(VehicleStatus status)
+        {
+            var vehicles = await _vehicleService.GetByStatusAsync(status);
+            return Ok(vehicles);
         }
 
     }
