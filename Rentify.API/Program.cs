@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Rentify.DataAccess.Context;
-using Rentify.DataAccess.Seeders;
+//using Rentify.DataAccess.Seeders;
 //using Rentify.Domain.Helpers;
 using Rentify.DataAccess.Repositories;
 using Rentify.Domain.Interfaces.Repositories;
