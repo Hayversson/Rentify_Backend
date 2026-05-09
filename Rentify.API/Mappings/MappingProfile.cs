@@ -16,6 +16,17 @@ namespace Rentify.API.Mappings
             // Customer Mapping
             CreateMap<CustomerRequestDto, Customer>();
             CreateMap<Customer, CustomerResponseDto>();
+            //Vehicle mappings
+            CreateMap<VehicleRequestDTO, Vehicle>();
+            CreateMap<Vehicle, VehicleResponseDTO>();
+
+            //VehicleType mappings
+            CreateMap<VehicleTypeRequestDTO, VehicleType>();
+            CreateMap<VehicleType, VehicleTypeResponseDTO>();
+
+            // VehicleMaintenance mappings
+            CreateMap<VehicleMaintenanceRequestDTO, VehicleMaintenance>();
+            CreateMap<VehicleMaintenance, VehicleMaintenanceResponseDTO>();
         }
     }
 }

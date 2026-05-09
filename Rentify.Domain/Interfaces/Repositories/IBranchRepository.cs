@@ -1,4 +1,4 @@
-﻿using Rentify.Domain.Entities;
+using Rentify.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

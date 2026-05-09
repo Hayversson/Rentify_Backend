@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Rentify.DataAccess.Repositories;
-using Rentify.Domain.Interfaces.Repositories;
 using Rentify.DataAccess.Context;
 using Rentify.DataAccess.Seeders;
 //using Rentify.Domain.Helpers;
+using Rentify.DataAccess.Repositories;
+using Rentify.Domain.Interfaces.Repositories;
 using Rentify.Domain.Interfaces.Services;
 using Rentify.Domain.Services;
 using System.ComponentModel.Design;
@@ -19,6 +19,9 @@ builder.Services.AddDbContext<RentifyDbContext>(options =>
 // ── Repositories ──
 builder.Services.AddScoped(typeof(IGenericRepository<>),
 typeof(GenericRepository<>));
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>(); 
+builder.Services.AddScoped<IVehicleMaintenanceRepository, VehicleMaintenanceRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 
@@ -26,7 +29,9 @@ builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 // ── Services ──
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
-
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleTypeService, VehicleTypeService>();
+builder.Services.AddScoped<IVehicleMaintenanceService, VehicleMaintenanceService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -37,6 +42,7 @@ builder.Services.AddControllers();
 // ── Swagger ──
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // ── Data Seeder ──

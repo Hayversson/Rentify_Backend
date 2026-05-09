@@ -25,5 +25,6 @@ namespace Rentify.Domain.Entities
         public Branch ReturnBranch { get; set; } = null!;
 
         public Payment Payment { get; set; } = null!;
+
     }
 }

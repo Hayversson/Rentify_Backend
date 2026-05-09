@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Rentify.DataAccess.Context;
 using Rentify.Domain.Entities;
 using Rentify.Domain.Interfaces.Repositories;
