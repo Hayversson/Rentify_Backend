@@ -10,8 +10,8 @@ namespace Rentify.DataAccess.Context
         {
         }
         public DbSet<Vehicle> Vehicles { get; set; }
-        public object Branches { get; set; }
-        public object Customers { get; set; }
+        public DbSet<Branch> Branches { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
