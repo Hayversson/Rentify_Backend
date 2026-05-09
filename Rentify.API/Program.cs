@@ -2,10 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Rentify.DataAccess.Repositories;
 using Rentify.Domain.Interfaces.Repositories;
 using Rentify.DataAccess.Context;
-using Rentify.DataAccess.Repositories;
 using Rentify.DataAccess.Seeders;
-using Rentify.Domain.Helpers;
-using Rentify.Domain.Interfaces.Repositories;
+//using Rentify.Domain.Helpers;
 using Rentify.Domain.Interfaces.Services;
 using Rentify.Domain.Services;
 using System.ComponentModel.Design;
@@ -21,9 +19,11 @@ builder.Services.AddDbContext<RentifyDbContext>(options =>
 // ── Repositories ──
 builder.Services.AddScoped(typeof(IGenericRepository<>),
 typeof(GenericRepository<>));
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 
 
 // ── Services ──
+builder.Services.AddScoped<IBranchService, BranchService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -37,14 +37,14 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // ── Data Seeder ──
-using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
+/*using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
 {
     var context = scope.ServiceProvider
         .GetRequiredService<RentifyDbContext>();
 
     await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
     await DataSeeder.SeedAsync(context);
-}
+}*/
 
 
 // ── Middleware Pipeline ──

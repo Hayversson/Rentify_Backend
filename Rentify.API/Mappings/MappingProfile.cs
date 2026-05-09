@@ -9,7 +9,10 @@ namespace Rentify.API.Mappings
     {
         public MappingProfile()
         {
-            // ... Mappings
+            // Branch Mapping 
+            CreateMap<BranchRequestDto, Branch>();
+            CreateMap<Branch, BranchResponseDto>();
+
         }
     }
 }

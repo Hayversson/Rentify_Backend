@@ -10,6 +10,8 @@ namespace Rentify.DataAccess.Context
         {
         }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public object Branches { get; set; }
+        public object Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +60,35 @@ namespace Rentify.DataAccess.Context
                 entity.HasOne(r => r.Payment)
                       .WithOne(p => p.Rental)
                       .HasForeignKey<Payment>(p => p.RentalId);
+            });
+
+            // ── Branch Configuration ──
+            modelBuilder.Entity<Branch>(entity =>
+            {
+                entity.HasKey(b => b.Id);
+                entity.Property(b => b.Name)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.Property(b => b.City)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.Property(b => b.Address)
+                      .IsRequired()
+                      .HasMaxLength(200);
+                entity.Property(b => b.Phone)
+                      .IsRequired()
+                      .HasMaxLength(20);
+                entity.Property(b => b.OpeningTime)
+                      .IsRequired();
+                entity.Property(b => b.ClosingTime)
+                      .IsRequired();
+                entity.Property(b => b.CreatedAt)
+                      .IsRequired();
+                entity.Property(b => b.UpdatedAt)
+                      .IsRequired(false);
+
+                // Índices
+                entity.HasIndex(b => b.Name).IsUnique();
             });
         }
     }
