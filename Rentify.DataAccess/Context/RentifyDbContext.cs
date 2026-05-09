@@ -62,6 +62,36 @@ namespace Rentify.DataAccess.Context
                       .HasForeignKey<Payment>(p => p.RentalId);
             });
 
+            // ── Customer Configuration ──
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.FirstName)
+                      .IsRequired()
+                      .HasMaxLength(80);
+                entity.Property(c => c.LastName)
+                      .IsRequired()
+                      .HasMaxLength(80);
+                entity.Property(c => c.Email)
+                      .IsRequired()
+                      .HasMaxLength(150);
+                entity.Property(c => c.Phone)
+                      .IsRequired()
+                      .HasMaxLength(20);
+                entity.Property(c => c.LicenseNumber)
+                      .IsRequired()
+                      .HasMaxLength(50);
+                entity.Property(c => c.LicenseExpirationDate)
+                      .IsRequired();
+                entity.Property(c => c.CreatedAt)
+                      .IsRequired();
+                entity.Property(c => c.UpdatedAt)
+                      .IsRequired(false);
+                // Índices únicos 
+                entity.HasIndex(c => c.Email).IsUnique();
+                entity.HasIndex(c => c.LicenseNumber).IsUnique();
+            });
+
             // ── Branch Configuration ──
             modelBuilder.Entity<Branch>(entity =>
             {

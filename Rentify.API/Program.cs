@@ -19,11 +19,14 @@ builder.Services.AddDbContext<RentifyDbContext>(options =>
 // ── Repositories ──
 builder.Services.AddScoped(typeof(IGenericRepository<>),
 typeof(GenericRepository<>));
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 
 
 // ── Services ──
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
+
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

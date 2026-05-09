@@ -13,6 +13,9 @@ namespace Rentify.API.Mappings
             CreateMap<BranchRequestDto, Branch>();
             CreateMap<Branch, BranchResponseDto>();
 
+            // Customer Mapping
+            CreateMap<CustomerRequestDto, Customer>();
+            CreateMap<Customer, CustomerResponseDto>();
         }
     }
 }
