@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Rentify.DataAccess.Context;
+using Rentify.DataAccess.Seeders;
+//using Rentify.Domain.Helpers;
 using Rentify.DataAccess.Repositories;
-using Rentify.DataAccess.Seed;
 using Rentify.Domain.Interfaces.Repositories;
 using Rentify.Domain.Interfaces.Services;
 using Rentify.Domain.Services;
@@ -16,15 +17,18 @@ builder.Services.AddDbContext<RentifyDbContext>(options =>
  builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ── Repositories ──
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericRepository<>),
+typeof(GenericRepository<>));
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>(); 
 builder.Services.AddScoped<IVehicleMaintenanceRepository, VehicleMaintenanceRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 
 
-
 // ── Services ──
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleTypeService, VehicleTypeService>();
 builder.Services.AddScoped<IVehicleMaintenanceService, VehicleMaintenanceService>();
@@ -42,14 +46,14 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // ── Data Seeder ──
-using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
+/*using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
 {
     var context = scope.ServiceProvider
         .GetRequiredService<RentifyDbContext>();
 
     await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
     await DataSeeder.SeedAsync(context);
-}
+}*/
 
 
 // ── Middleware Pipeline ──

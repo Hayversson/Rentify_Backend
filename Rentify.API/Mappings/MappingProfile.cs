@@ -9,6 +9,13 @@ namespace Rentify.API.Mappings
     {
         public MappingProfile()
         {
+            // Branch Mapping 
+            CreateMap<BranchRequestDto, Branch>();
+            CreateMap<Branch, BranchResponseDto>();
+
+            // Customer Mapping
+            CreateMap<CustomerRequestDto, Customer>();
+            CreateMap<Customer, CustomerResponseDto>();
             //Vehicle mappings
             CreateMap<VehicleRequestDTO, Vehicle>();
             CreateMap<Vehicle, VehicleResponseDTO>();
