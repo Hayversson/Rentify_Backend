@@ -7,18 +7,19 @@ namespace Rentify.Domain.Entities
 {
     public class Rental : AuditBase
     {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal TotalCost { get; set; }
+        public RentalStatus Status { get; set; }
+
+        // FK
         public int CustomerId { get; set; }
         public int VehicleId { get; set; }
 
         public int PickupBranchId { get; set; }
         public int ReturnBranchId { get; set; }
 
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-
-        public decimal TotalCost { get; set; }
-        public RentalStatus Status { get; set; }
-
+        // Navigation properties
         public Customer Customer { get; set; } = null!;
         public Vehicle Vehicle { get; set; } = null!;
         public Branch PickupBranch { get; set; } = null!;
