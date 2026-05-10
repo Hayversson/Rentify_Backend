@@ -6,10 +6,11 @@ namespace Rentify.Domain.Entities
 {
     public class Payment : AuditBase
     {
-        // FK
-        public int RentalId { get; set; }
         public decimal Amount { get; set; }
         public string Method { get; set; } = string.Empty;
+
+        // FK
+        public int RentalId { get; set; }
 
         //Navigation property
         public Rental Rental { get; set; } = null!;

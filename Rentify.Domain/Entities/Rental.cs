@@ -24,7 +24,6 @@ namespace Rentify.Domain.Entities
         public Vehicle Vehicle { get; set; } = null!;
         public Branch PickupBranch { get; set; } = null!;
         public Branch ReturnBranch { get; set; } = null!;
-
         public Payment Payment { get; set; } = null!;
 
     }
