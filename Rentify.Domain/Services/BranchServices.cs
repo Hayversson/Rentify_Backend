@@ -119,6 +119,18 @@ namespace Rentify.Domain.Services
             await _branchRepository.UpdateAsync(branch);
         }
 
+        public async Task ActivateAsync(int id)
+        {
+            var branch = await _branchRepository.GetByIdAsync(id);
+
+            if (branch == null)
+                throw new KeyNotFoundException("Sucursal no encontrada");
+
+            branch.IsActive = true;
+
+            await _branchRepository.UpdateAsync(branch);
+        }
+
         // HELPER PRIVADO
         private async Task ValidateBranchAsync(Branch branch, int? id = null)
         {

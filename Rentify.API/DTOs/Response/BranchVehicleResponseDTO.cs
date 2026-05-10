@@ -1,8 +1,6 @@
-using Rentify.Domain.Entities;
-
-namespace Rentify.API.DTOs.Response
+﻿namespace Rentify.API.DTOs.Response
 {
-    public class BranchResponseDTO
+    public class BranchVehicleResponseDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -12,5 +10,7 @@ namespace Rentify.API.DTOs.Response
         public TimeSpan OpeningTime { get; set; }
         public TimeSpan ClosingTime { get; set; }
         public bool IsActive { get; set; }
+
+        public List<VehicleResponseDTO> Vehicles { get; set; } = new();
     }
 }

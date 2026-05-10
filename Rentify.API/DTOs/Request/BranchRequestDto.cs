@@ -1,6 +1,6 @@
 namespace Rentify.API.DTOs.Request
 {
-    public class BranchRequestDto
+    public class BranchRequestDTO
     {
         public string Name { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;

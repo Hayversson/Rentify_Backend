@@ -1,6 +1,6 @@
 namespace Rentify.API.DTOs.Request
 {
-    public class CustomerRequestDto
+    public class CustomerRequestDTO
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
