@@ -1,6 +1,6 @@
 namespace Rentify.API.DTOs.Response
 {
-    public class CustomerResponseDto
+    public class CustomerResponseDTO
     {
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;

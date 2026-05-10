@@ -19,5 +19,7 @@ namespace Rentify.Domain.Interfaces.Services
         Task DeleteAsync(int id);
 
         Task DeactivateAsync(int id);
+
+        Task ActivateAsync(int id);
     }
 }
