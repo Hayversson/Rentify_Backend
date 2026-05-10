@@ -47,6 +47,7 @@ namespace Rentify.DataAccess.Repositories
                 .Where(v => v.VehicleTypeId == vehicleTypeId)
                 .ToListAsync();
         }
+        
 
     }
 }
