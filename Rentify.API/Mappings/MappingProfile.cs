@@ -9,7 +9,26 @@ namespace Rentify.API.Mappings
     {
         public MappingProfile()
         {
-            // ... Mappings
+            // Branch Mapping 
+            CreateMap<BranchRequestDTO, Branch>();
+            CreateMap<Branch, BranchResponseDTO>();
+            CreateMap<Branch, BranchVehicleResponseDTO>(); // Branch with Vehicles Mapping
+
+            // Customer Mapping
+            CreateMap<CustomerRequestDTO, Customer>();
+            CreateMap<Customer, CustomerResponseDTO>();
+
+            //Vehicle mappings
+            CreateMap<VehicleRequestDTO, Vehicle>();
+            CreateMap<Vehicle, VehicleResponseDTO>();
+
+            //VehicleType mappings
+            CreateMap<VehicleTypeRequestDTO, VehicleType>();
+            CreateMap<VehicleType, VehicleTypeResponseDTO>();
+
+            // VehicleMaintenance mappings
+            CreateMap<VehicleMaintenanceRequestDTO, VehicleMaintenance>();
+            CreateMap<VehicleMaintenance, VehicleMaintenanceResponseDTO>();
         }
     }
 }
