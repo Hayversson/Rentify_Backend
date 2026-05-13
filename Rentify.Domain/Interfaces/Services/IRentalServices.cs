@@ -11,11 +11,10 @@ namespace Rentify.Domain.Interfaces.Services
         Task<IEnumerable<Rental>> GetAllAsync();
         Task<Rental?> GetByIdAsync(int id);
         Task<Rental> CreateAsync(Rental entity);
-        Task UpdateAsync(Rental entity);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<Rental?>> GetByVehiculeAsync(int vehicleId);
         Task<IEnumerable<Rental?>> GetByCustomerAsync(int customerId);
-        Task UpdateStatusAsync(int id, RentalStatus newstatus);
+        Task UpdateRentalAsync(int id, Rental rental);
     }
 }

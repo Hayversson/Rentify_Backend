@@ -50,14 +50,9 @@ namespace Rentify.Domain.Services
             return await _rep.GetByVehiculeAsync(vehicleId);
         }
 
-        public async Task UpdateAsync(Rental entity)
+        public async Task UpdateRentalAsync(int id, Rental rental)
         {
-            await _rep.UpdateAsync(entity);
-        }
-
-        public async Task UpdateStatusAsync(int id, RentalStatus newstatus)
-        {
-            await _rep.UpdateStatusAsync(id, newstatus);
+            await _rep.UpdateRentalAsync(id, rental);
         }
     }
 }
