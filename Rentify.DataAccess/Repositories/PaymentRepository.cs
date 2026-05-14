@@ -30,5 +30,7 @@ namespace Rentify.DataAccess.Repositories
             var payments = await _dbSet.Where(p => p.Id == id).ToListAsync();
             return payments;
         }
+
+        //AGREGAR GET WITH INCLUDES
     }
 }
