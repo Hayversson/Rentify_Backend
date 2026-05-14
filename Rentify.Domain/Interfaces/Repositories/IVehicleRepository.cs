@@ -11,6 +11,5 @@ namespace Rentify.Domain.Interfaces.Repositories
         Task<Vehicle?> GetByPlateAsync(string plate);
         Task<Vehicle?> GetByYearAsync(int year);
         Task<IEnumerable<Vehicle>> GetByTypeIdAsync(int vehicleTypeId);
-
     }
 }

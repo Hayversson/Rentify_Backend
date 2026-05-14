@@ -183,5 +183,13 @@ namespace Rentify.Domain.Services
             await _vehicleRepository.UpdateAsync(vehicle);
         }
         #endregion
+
+        #region GetByStatusAsync
+        public async Task<IEnumerable<Vehicle>> GetByStatusAsync(VehicleStatus status)
+        {
+            _logger.LogInformation("Filtering vehicles by status: {Status}", status);
+            return await _vehicleRepository.GetByStatusAsync(status);
+        }
+        #endregion
     }
 }

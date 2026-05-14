@@ -21,12 +21,12 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BranchResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BranchResponseDTO>>> GetAll()
         {
             try
             {
                 var branches = await _branchService.GetAllAsync();
-                var response = _mapper.Map<IEnumerable<BranchResponseDto>>(branches);
+                var response = _mapper.Map<IEnumerable<BranchResponseDTO>>(branches);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -36,12 +36,12 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet("active")]
-        public async Task<ActionResult<IEnumerable<BranchResponseDto>>> GetActive()
+        public async Task<ActionResult<IEnumerable<BranchResponseDTO>>> GetActive()
         {
             try
             {
                 var branches = await _branchService.GetActiveBranchesAsync();
-                var response = _mapper.Map<IEnumerable<BranchResponseDto>>(branches);
+                var response = _mapper.Map<IEnumerable<BranchResponseDTO>>(branches);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BranchResponseDto>> GetById(int id)
+        public async Task<ActionResult<BranchResponseDTO>> GetById(int id)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Rentify.API.Controllers
                 if (branch == null)
                     return NotFound();
 
-                var response = _mapper.Map<BranchResponseDto>(branch);
+                var response = _mapper.Map<BranchResponseDTO>(branch);
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
@@ -73,7 +73,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet("{id}/vehicles")]
-        public async Task<ActionResult<BranchResponseDto>> GetByIdWithVehicles(int id)
+        public async Task<ActionResult<BranchVehicleResponseDTO>> GetByIdWithVehicles(int id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Rentify.API.Controllers
                 if (branch == null)
                     return NotFound();
 
-                var response = _mapper.Map<BranchResponseDto>(branch);
+                var response = _mapper.Map<BranchVehicleResponseDTO>(branch);
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
@@ -95,13 +95,13 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BranchResponseDto>> Create([FromBody] BranchRequestDto request)
+        public async Task<ActionResult<BranchResponseDTO>> Create([FromBody] BranchRequestDTO request)
         {
             try
             {
                 var branch = _mapper.Map<Branch>(request);
                 var created = await _branchService.CreateAsync(branch);
-                var response = _mapper.Map<BranchResponseDto>(created);
+                var response = _mapper.Map<BranchResponseDTO>(created);
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
             catch (KeyNotFoundException ex)
@@ -115,7 +115,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] BranchRequestDto request)
+        public async Task<IActionResult> Update(int id, [FromBody] BranchRequestDTO request)
         {
             try
             {
@@ -157,6 +157,24 @@ namespace Rentify.API.Controllers
             try
             {
                 await _branchService.DeactivateAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}/activate")]
+        public async Task<IActionResult> Activate(int id)
+        {
+            try
+            {
+                await _branchService.ActivateAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)

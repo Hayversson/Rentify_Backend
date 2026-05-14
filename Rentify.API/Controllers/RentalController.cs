@@ -58,7 +58,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]RentalRequestDTO dto)
+        public async Task<IActionResult> Create(RentalRequestDTO dto)
         {
             try
             {

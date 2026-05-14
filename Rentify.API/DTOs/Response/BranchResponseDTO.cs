@@ -2,7 +2,7 @@ using Rentify.Domain.Entities;
 
 namespace Rentify.API.DTOs.Response
 {
-    public class BranchResponseDto
+    public class BranchResponseDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

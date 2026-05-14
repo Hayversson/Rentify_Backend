@@ -21,12 +21,12 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CustomerResponseDTO>>> GetAll()
         {
             try
             {
                 var customers = await _customerService.GetAllAsync();
-                var response = _mapper.Map<IEnumerable<CustomerResponseDto>>(customers);
+                var response = _mapper.Map<IEnumerable<CustomerResponseDTO>>(customers);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerResponseDto>> GetById(int id)
+        public async Task<ActionResult<CustomerResponseDTO>> GetById(int id)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace Rentify.API.Controllers
                 if (customer == null)
                     return NotFound();
 
-                var response = _mapper.Map<CustomerResponseDto>(customer);
+                var response = _mapper.Map<CustomerResponseDTO>(customer);
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
@@ -58,7 +58,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpGet("{id}/rentals")]
-        public async Task<ActionResult<CustomerResponseDto>> GetByIdWithRentals(int id)
+        public async Task<ActionResult<CustomerResponseDTO>> GetByIdWithRentals(int id)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Rentify.API.Controllers
                 if (customer == null)
                     return NotFound();
 
-                var response = _mapper.Map<CustomerResponseDto>(customer);
+                var response = _mapper.Map<CustomerResponseDTO>(customer);
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
@@ -80,13 +80,13 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerResponseDto>> Create([FromBody] CustomerRequestDto request)
+        public async Task<ActionResult<CustomerResponseDTO>> Create([FromBody] CustomerResponseDTO request)
         {
             try
             {
                 var customer = _mapper.Map<Customer>(request);
                 var created = await _customerService.CreateAsync(customer);
-                var response = _mapper.Map<CustomerResponseDto>(created);
+                var response = _mapper.Map<CustomerResponseDTO>(created);
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
             catch (KeyNotFoundException ex)
@@ -100,7 +100,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CustomerRequestDto request)
+        public async Task<IActionResult> Update(int id, [FromBody] CustomerRequestDTO request)
         {
             try
             {
