@@ -32,6 +32,10 @@ namespace Rentify.API.Mappings
             // Rental mappings
             CreateMap<RentalRequestDTO, Rental>();
             CreateMap<Rental, RentalResponseDTO>();
+
+            // Payment mappings
+            CreateMap<PaymentRequestDTO, Payment>();
+            CreateMap<Payment, PaymentResponseDTO>();
         }
     }
 }

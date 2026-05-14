@@ -10,6 +10,6 @@ namespace Rentify.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<Rental?>> GetByVehiculeAsync(int vehicleId);
         Task<IEnumerable<Rental?>> GetByCustomerAsync(int customerId);
-        Task UpdateRentalAsync(int id, Rental dto);
+        Task UpdateStatusAsync(int id, RentalStatus newstatus);
     }
 }

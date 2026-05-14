@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rentify.API.DTOs.Request;
 using Rentify.API.DTOs.Response;
 using Rentify.Domain.Entities;
+using Rentify.Domain.Enums;
 using Rentify.Domain.Interfaces.Services;
 
 namespace Rentify.API.Controllers
@@ -56,8 +57,8 @@ namespace Rentify.API.Controllers
             }
         }
 
-        [HttpPost("{Rental}")]
-        public async Task<IActionResult> Create(RentalRequestDTO dto)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody]RentalRequestDTO dto)
         {
             try
             {
@@ -91,10 +92,10 @@ namespace Rentify.API.Controllers
                     _log.LogWarning("Rental with id {Id} not found for update.", id);
                     return BadRequest("Rental not found.");
                 }
-                
+
                 var rental = _map.Map<Rental>(dto);
-                await _rental.UpdateRentalAsync(id, rental);
-                
+                await _rental.UpdateAsync(rental);
+
                 var response = _map.Map<RentalResponseDTO>(rental);
                 _log.LogInformation("Updated rental successfully.");
 
@@ -159,6 +160,22 @@ namespace Rentify.API.Controllers
             catch (Exception ex)
             {
                 _log.LogError(ex, "Error occurred while retrieving rentals for vehicule {VehiculeId}.", vehiculeId);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("{id}/Status")]
+        public async Task<IActionResult> UpdateStatus(int id, UpdateRentalStatusDTO dto)
+        {
+            try
+            {
+                await _rental.UpdateStatusAsync(id, dto.Status);
+                _log.LogInformation("Updated rental status successfully.");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "Error occurred while updating rental status.");
                 return BadRequest(ex.Message);
             }
         }

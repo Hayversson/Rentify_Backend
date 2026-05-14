@@ -23,30 +23,26 @@ namespace Rentify.DataAccess.Repositories
             var rentals = await _dbSet.Where(c => c.CustomerId == customerId).ToListAsync();
             return rentals;
         }
-        public async Task UpdateRentalAsync(int id, Rental rental)
+        public async Task UpdateStatusAsync(int id, RentalStatus newStatus)
         {
             var entity = await GetByIdAsync(id);
             if (entity is null)
             {
                 throw new KeyNotFoundException($"Rental with ID {id} not found.");
             }
-            var validtransitions = (entity.Status, rental.Status) switch
+            var validtransitions = (entity.Status, newStatus) switch
             {
                 (RentalStatus.Pending, RentalStatus.Active) => true,
                 (RentalStatus.Pending, RentalStatus.Cancelled) => true,
                 (RentalStatus.Active, RentalStatus.Completed) => true,
-                (RentalStatus.Pending, RentalStatus.Pending) => true,
-                (RentalStatus.Active, RentalStatus.Active) => true,
-                (RentalStatus.Completed, RentalStatus.Completed) => true,
-                (RentalStatus.Cancelled, RentalStatus.Cancelled) => true,
                 _ => false
             };
             if (!validtransitions)
             {
-                throw new InvalidOperationException($"Invalid status transition from {entity.Status} to {rental.Status}.");
+                throw new InvalidOperationException($"Invalid status transition from {entity.Status} to {newStatus}.");
             }
-            entity.Status = rental.Status;
-            await UpdateAsync(rental);
+            entity.Status = newStatus;
+            await UpdateAsync(entity);
         }
 
         public async Task<IEnumerable<Rental?>> GetByVehiculeAsync(int vehicleId)
