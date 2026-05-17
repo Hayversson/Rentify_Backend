@@ -58,7 +58,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RentalRequestDTO dto)
+        public async Task<IActionResult> Create(RentalRequestDTO dto, string paymentMethod)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Rentify.API.Controllers
                 }
                 dto.Status = 0;
                 var entity = _map.Map<Rental>(dto);
-                await _rental.CreateAsync(entity);
+                await _rental.CreateAsync(entity, paymentMethod);
                 var response = _map.Map<RentalResponseDTO>(entity);
                 _log.LogInformation("Created rental successfully.");
                 return Ok(response);
