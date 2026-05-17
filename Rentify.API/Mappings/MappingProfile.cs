@@ -36,6 +36,7 @@ namespace Rentify.API.Mappings
 
             // Payment mappings
             CreateMap<PaymentRequestDTO, Payment>();
+            CreateMap<UpdatePaymentDTO, Payment>().ReverseMap();
             CreateMap<Payment, PaymentResponseDTO>();
         }
     }

@@ -59,15 +59,15 @@ namespace Rentify.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(PaymentRequestDTO payment)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(UpdatePaymentDTO payment, int id)
         {
             if (payment == null)
             {
                 return BadRequest();
             }
             var entity = _map.Map<Payment>(payment);
-            await _pay.UpdateAsync(entity);
+            await _pay.UpdateAsync(entity, id);
             return NoContent();
         }
 

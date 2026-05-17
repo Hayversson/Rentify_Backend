@@ -49,9 +49,18 @@ namespace Rentify.Domain.Services
             return await _rep.GetByVehicule(id);
         }
 
-        public async Task UpdateAsync(Payment entity)
+        public async Task UpdateAsync(Payment entity, int id)
         {
-            await _rep.UpdateAsync(entity);
+            var existing = await _rep.GetByIdAsync(id);
+            if (existing is null)
+            {
+                throw new KeyNotFoundException($"Payment with id {id} not found.");
+            }
+
+            existing.Amount = entity.Amount;
+            existing.Method = entity.Method;
+
+            await _rep.UpdateAsync(existing);
         }
     }
 }
