@@ -12,8 +12,8 @@ using Rentify.DataAccess.Context;
 namespace Rentify.DataAccess.Migrations
 {
     [DbContext(typeof(RentifyDbContext))]
-    [Migration("20260509173029_CompleteVehicleRentalSystemSetup")]
-    partial class CompleteVehicleRentalSystemSetup
+    [Migration("20260514232102_InnitialSquema")]
+    partial class InnitialSquema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

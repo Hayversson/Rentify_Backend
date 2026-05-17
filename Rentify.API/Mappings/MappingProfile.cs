@@ -29,6 +29,15 @@ namespace Rentify.API.Mappings
             // VehicleMaintenance mappings
             CreateMap<VehicleMaintenanceRequestDTO, VehicleMaintenance>();
             CreateMap<VehicleMaintenance, VehicleMaintenanceResponseDTO>();
+
+            // Rental mappings
+            CreateMap<RentalRequestDTO, Rental>();
+            CreateMap<Rental, RentalResponseDTO>();
+
+            // Payment mappings
+            CreateMap<PaymentRequestDTO, Payment>();
+            CreateMap<UpdatePaymentDTO, Payment>().ReverseMap();
+            CreateMap<Payment, PaymentResponseDTO>();
         }
     }
 }
