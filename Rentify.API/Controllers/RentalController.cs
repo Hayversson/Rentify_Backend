@@ -15,12 +15,16 @@ namespace Rentify.API.Controllers
     {
         private readonly ILogger<Rental> _log;
         private readonly IRentalServices _rental;
+        private readonly IVehicleService _veh;
+        private readonly IPaymentServices _pay;
         private readonly IMapper _map;
-        public RentalController(IRentalServices rental, ILogger<Rental> log, IMapper map)
+        public RentalController(IRentalServices rental, IVehicleService veh, ILogger<Rental> log, IMapper map, IPaymentServices pay)
         {
             _rental = rental;
             _log = log;
             _map = map;
+            _veh = veh;
+            _pay = pay;
         }
 
         [HttpGet]
@@ -67,9 +71,20 @@ namespace Rentify.API.Controllers
                     _log.LogWarning("Received null rental request.");
                     return BadRequest("Rental data is required.");
                 }
-                dto.Status = 0;
                 var entity = _map.Map<Rental>(dto);
+                entity.Status = 0;
+                entity.Vehicle = await _veh.GetByIdWithVehicleTypeAndMaintenanceAsync(dto.VehicleId);
+
                 await _rental.CreateAsync(entity, paymentMethod);
+
+                // Create Payment Automatically
+                await _pay.CreateAsync(new Payment
+                {
+                    RentalId = entity.Id,
+                    Amount = entity.TotalCost,
+                    Method = paymentMethod,
+                }); 
+
                 var response = _map.Map<RentalResponseDTO>(entity);
                 _log.LogInformation("Created rental successfully.");
                 return Ok(response);

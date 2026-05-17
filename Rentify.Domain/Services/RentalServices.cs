@@ -11,27 +11,25 @@ namespace Rentify.Domain.Services
     public class RentalServices : IRentalServices
     {
         private readonly IRentalRepository _rep;
-        private readonly IPaymentRepository _pay;
-        public RentalServices(IRentalRepository rep, IPaymentRepository paymentRep)
+        public RentalServices(IRentalRepository rep)
         {
             _rep = rep;
-            _pay = paymentRep;
         }
         public async Task<Rental> CreateAsync(Rental entity, string paymentMethod)
         {
-            if (entity.Vehicle.Status != VehicleStatus.Available || entity.Vehicle.Status != VehicleStatus.InMaintenance ||
-                entity.StartDate < entity.EndDate || entity.StartDate < DateTime.Now)
+            if (entity.Vehicle.Status != VehicleStatus.Available || entity.StartDate > entity.EndDate ||
+                entity.StartDate < DateTime.Now)
             {
                 throw new InvalidOperationException("The vehicle is not available for rental.");
             }
             int days = (entity.EndDate - entity.StartDate).Days;
             entity.TotalCost = days * entity.Vehicle.VehicleType.PricePerDay;
-            var payment = await _pay.CreateAsync(new Payment
+            var payment = new Payment
             {
                 Amount = entity.TotalCost,
                 Method = paymentMethod,
-                RentalId = entity.Id
-            });
+                RentalId = entity.Id,
+            };
             entity.Payment = payment;
             return await _rep.CreateAsync(entity);
         }

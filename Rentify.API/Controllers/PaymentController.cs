@@ -60,7 +60,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] PaymentRequestDTO payment)
+        public async Task<IActionResult> Update(PaymentRequestDTO payment)
         {
             if (payment == null)
             {
