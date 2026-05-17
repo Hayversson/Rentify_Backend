@@ -13,21 +13,13 @@ namespace Rentify.DataAccess.Repositories
 
         public async Task<IEnumerable<Payment>> GetByCustomer(int id)
         {
-            if (!await ExistsAsync(id))
-            {
-                throw new KeyNotFoundException("Customer no se encontro");
-            }
-            var payments = await _dbSet.Where(p => p.Id == id).ToListAsync();
+            var payments = await _dbSet.Where(p => p.Rental.CustomerId == id).ToListAsync();
             return payments;
         }
 
         public async Task<IEnumerable<Payment>> GetByVehicule(int id)
         {
-            if (!await ExistsAsync(id))
-            {
-                throw new KeyNotFoundException("Vehicule no encontrado");
-            }
-            var payments = await _dbSet.Where(p => p.Id == id).ToListAsync();
+            var payments = await _dbSet.Where(p => p.Rental.VehicleId == id).ToListAsync();
             return payments;
         }
 

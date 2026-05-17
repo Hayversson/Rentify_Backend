@@ -64,9 +64,23 @@ namespace Rentify.Domain.Services
             return await _rep.GetByVehiculeAsync(vehicleId);
         }
 
-        public async Task UpdateAsync(Rental rental)
+        public async Task UpdateAsync(Rental rental, int id)
         {
-            await _rep.UpdateAsync(rental);
+            var existingRental = await _rep.GetByIdAsync(id);
+            if (existingRental == null)
+            {
+                throw new InvalidOperationException("Rental not found.");
+            }
+
+            existingRental.StartDate = rental.StartDate;
+            existingRental.EndDate = rental.EndDate;
+            existingRental.PickupBranchId = rental.PickupBranchId;
+            existingRental.ReturnBranchId = rental.ReturnBranchId;
+            existingRental.VehicleId = rental.VehicleId;
+            existingRental.CustomerId = rental.CustomerId;
+            existingRental.UpdatedAt = DateTime.Now;
+
+            await _rep.UpdateAsync(existingRental);
         }
 
         public async Task UpdateStatusAsync(int id, RentalStatus newStatus)

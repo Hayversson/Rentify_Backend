@@ -11,7 +11,7 @@ namespace Rentify.Domain.Interfaces.Services
         Task<IEnumerable<Rental>> GetAllAsync();
         Task<Rental?> GetByIdAsync(int id);
         Task<Rental> CreateAsync(Rental entity, string paymentMethod);
-        Task UpdateAsync(Rental rental);
+        Task UpdateAsync(Rental rental, int id);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<Rental?>> GetByVehiculeAsync(int vehicleId);

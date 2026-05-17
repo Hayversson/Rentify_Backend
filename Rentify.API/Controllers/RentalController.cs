@@ -101,15 +101,14 @@ namespace Rentify.API.Controllers
         {
             try
             {
-                var entity = await _rental.GetByIdAsync(id);
-                if (entity is null)
+                if (dto is null)
                 {
                     _log.LogWarning("Rental with id {Id} not found for update.", id);
                     return BadRequest("Rental not found.");
                 }
 
                 var rental = _map.Map<Rental>(dto);
-                await _rental.UpdateAsync(rental);
+                await _rental.UpdateAsync(rental, id);
 
                 var response = _map.Map<RentalResponseDTO>(rental);
                 _log.LogInformation("Updated rental successfully.");
