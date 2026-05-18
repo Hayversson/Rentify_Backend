@@ -80,7 +80,7 @@ namespace Rentify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerResponseDTO>> Create([FromBody] CustomerResponseDTO request)
+        public async Task<ActionResult<CustomerResponseDTO>> Create(CustomerRequestDTO request)
         {
             try
             {
