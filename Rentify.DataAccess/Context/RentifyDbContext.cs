@@ -31,7 +31,8 @@ namespace Rentify.DataAccess.Context
                       .IsRequired()
                       .HasMaxLength(100);
                 entity.Property(vt => vt.PricePerDay)
-                      .IsRequired();
+                      .IsRequired()
+                      .HasPrecision(18, 2);
                 entity.Property(t => t.CreatedAt)
                       .IsRequired();
                 entity.Property(t => t.UpdatedAt)
@@ -105,7 +106,8 @@ namespace Rentify.DataAccess.Context
                 entity.Property(p => p.RentalId)
                       .IsRequired();
                 entity.Property(p => p.Amount)
-                      .IsRequired();
+                      .IsRequired()
+                      .HasPrecision(18, 2);
                 entity.Property(p => p.Method)
                       .IsRequired();
                 entity.Property(p => p.CreatedAt)
@@ -127,7 +129,8 @@ namespace Rentify.DataAccess.Context
                 entity.Property(b => b.EndDate)
                       .IsRequired();
                 entity.Property(b => b.TotalCost)
-                      .IsRequired();
+                      .IsRequired()
+                      .HasPrecision(18, 2);
                 entity.Property(b => b.Status)
                        .IsRequired();
                 entity.Property(b => b.CreatedAt)
