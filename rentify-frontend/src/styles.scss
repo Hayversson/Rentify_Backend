@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+  }
+
+  a {
+    @apply text-slate-200 transition;
+  }
+}
+
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-6xl px-4;
+  }
+
+  .card {
+    @apply rounded-2xl border border-white/10 bg-slate-900/70 shadow-lg;
+  }
+
+  .card-hover {
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-2xl;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none ring-brand-500/40 focus:ring-2;
+  }
+
+  .select {
+    @apply w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none ring-brand-500/40 focus:ring-2;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-400 active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 transition hover:bg-white/10 active:scale-[0.98];
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-slate-200;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold text-white md:text-3xl;
+  }
+
+  .section-subtitle {
+    @apply text-sm text-slate-400 md:text-base;
+  }
+}

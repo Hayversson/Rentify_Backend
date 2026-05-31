@@ -1,0 +1,56 @@
+:host {
+  display: block;
+}
+
+.cta-card {
+  position: relative;
+  overflow: hidden;
+
+  .shine-effect {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(
+      45deg,
+      transparent 0%,
+      transparent 25%,
+      rgba(255, 255, 255, 0.12) 45%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.12) 55%,
+      transparent 75%,
+      transparent 100%
+    );
+    animation: shineSwipe 0.9s ease-in-out infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+
+.branch-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes shineSwipe {
+  0% {
+    transform: translateX(-150%) translateY(-150%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(150%) translateY(150%) rotate(45deg);
+  }
+}
+

@@ -1,0 +1,80 @@
+<section class="container-shell" *ngIf="!isLoading(); else loading">
+  <h1 class="text-3xl font-semibold text-white">Historial de rentas</h1>
+  <p class="mt-2 text-sm text-slate-400">
+    Datos provenientes de <span class="text-white">/api/Rental/customer</span>.
+  </p>
+
+  <div class="mt-6 card p-4">
+    <label class="text-xs text-slate-400">Selecciona un cliente</label>
+    <select class="select mt-2" [(ngModel)]="selectedCustomerId" (ngModelChange)="onCustomerChange()">
+      <option [ngValue]="null">Selecciona un cliente</option>
+      <option *ngFor="let customer of customers()" [ngValue]="customer.id">
+        {{ customer.firstName }} {{ customer.lastName }} · {{ customer.email }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mt-4" *ngIf="errorMessage()">
+    <div class="card p-4 text-sm text-red-300">{{ errorMessage() }}</div>
+  </div>
+
+  <div class="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="space-y-6">
+      <h2 class="text-lg font-semibold text-white">Rentas activas y pendientes</h2>
+      <article *ngFor="let rental of activeRentals" class="card p-5">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-base font-semibold text-white">{{ rental.vehicleLabel }}</p>
+            <p class="text-sm text-slate-400">{{ rental.period }}</p>
+          </div>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-amber-500/20 text-amber-300': rental.status === 0,
+              'bg-emerald-500/20 text-emerald-300': rental.status === 1
+            }"
+          >
+            {{ getStatusLabel(rental.status) }}
+          </span>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-300">
+          <span>Sucursal</span>
+          <span class="text-white">{{ rental.pickupBranch }}</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between text-sm text-slate-300">
+          <span>Total</span>
+          <span class="text-white">{{ rental.totalCost | currency: 'USD' }}</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="space-y-6">
+      <h2 class="text-lg font-semibold text-white">Rentas finalizadas / canceladas</h2>
+      <article *ngFor="let rental of pastRentals" class="card p-5">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-base font-semibold text-white">{{ rental.vehicleLabel }}</p>
+            <p class="text-sm text-slate-400">{{ rental.period }}</p>
+          </div>
+          <span class="badge bg-slate-700/60 text-slate-200">
+            {{ getStatusLabel(rental.status) }}
+          </span>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-300">
+          <span>Devolución</span>
+          <span class="text-white">{{ rental.returnBranch }}</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between text-sm text-slate-300">
+          <span>Total</span>
+          <span class="text-white">{{ rental.totalCost | currency: 'USD' }}</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<ng-template #loading>
+  <section class="container-shell">
+    <div class="card p-6 text-sm text-slate-400">Cargando historial desde el backend...</div>
+  </section>
+</ng-template>
