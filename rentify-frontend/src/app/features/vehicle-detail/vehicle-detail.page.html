@@ -1,0 +1,94 @@
+<section class="container-shell" *ngIf="!isLoading(); else loading">
+  <div *ngIf="!errorMessage(); else errorState">
+    <a routerLink="/vehicles" class="text-sm text-slate-400 hover:text-white">← Volver al catálogo</a>
+
+    <div class="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold text-white">{{ vehicle()?.model }}</h1>
+        <p class="mt-2 text-sm text-slate-400">
+          Placa {{ vehicle()?.plate }} · Año {{ vehicle()?.year }} · {{ vehicleType()?.name ?? 'Tipo no disponible' }}
+        </p>
+      </div>
+      <div class="text-right">
+        <p class="text-sm text-slate-400">Estado</p>
+        <p class="text-2xl font-semibold text-white">{{ getStatusLabel(vehicle()?.status ?? 0) }}</p>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+      <div class="space-y-6">
+        <div class="card p-6">
+          <h2 class="text-lg font-semibold text-white">Detalle del vehículo</h2>
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <div class="flex items-center justify-between text-sm text-slate-300">
+              <span>Tipo</span>
+              <span class="text-white">{{ vehicleType()?.name ?? 'No disponible' }}</span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-slate-300">
+              <span>Tarifa diaria</span>
+              <span class="text-white">
+                {{ vehicleType()?.pricePerDay ? (vehicleType()?.pricePerDay | currency: 'USD') : 'Sin tarifa' }}
+              </span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-slate-300">
+              <span>Sucursal</span>
+              <span class="text-white">{{ branch()?.name ?? 'No disponible' }}</span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-slate-300">
+              <span>Ciudad</span>
+              <span class="text-white">{{ branch()?.city ?? 'No disponible' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <h2 class="text-lg font-semibold text-white">Dirección de la sucursal</h2>
+          <p class="mt-2 text-sm text-slate-300">{{ branch()?.address ?? 'No disponible' }}</p>
+          <div class="mt-4 text-xs text-slate-500">
+            Horario: {{ branch()?.openingTime ?? '--' }} - {{ branch()?.closingTime ?? '--' }}
+          </div>
+        </div>
+      </div>
+
+      <aside class="card h-fit p-6">
+        <h2 class="text-lg font-semibold text-white">Continuar con la reserva</h2>
+        <p class="mt-2 text-sm text-slate-400">
+          Usa este vehículo para iniciar el flujo de reserva en el endpoint
+          <span class="text-white">/api/Rental</span>.
+        </p>
+
+        <form class="mt-6 grid gap-4">
+          <div>
+            <label class="text-xs text-slate-400">Fecha de inicio</label>
+            <input class="input mt-2" type="date" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-400">Fecha de fin</label>
+            <input class="input mt-2" type="date" />
+          </div>
+          <div class="card bg-white/5 p-4">
+            <div class="flex items-center justify-between text-sm text-slate-300">
+              <span>Tarifa diaria</span>
+              <span>
+                {{ vehicleType()?.pricePerDay ? (vehicleType()?.pricePerDay | currency: 'USD') : 'Sin tarifa' }}
+              </span>
+            </div>
+          </div>
+          <a class="btn-primary w-full text-center" routerLink="/booking">Reservar ahora</a>
+        </form>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<ng-template #loading>
+  <section class="container-shell">
+    <div class="card p-6 text-sm text-slate-400">Cargando detalle del vehículo...</div>
+  </section>
+</ng-template>
+
+<ng-template #errorState>
+  <section class="container-shell">
+    <div class="card p-6 text-sm text-red-300">{{ errorMessage() }}</div>
+  </section>
+</ng-template>

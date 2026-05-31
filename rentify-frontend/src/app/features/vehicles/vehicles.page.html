@@ -1,0 +1,80 @@
+<section class="container-shell" *ngIf="!isLoading(); else loading">
+  <div *ngIf="!errorMessage(); else errorState">
+    <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold text-white">Catálogo de vehículos</h1>
+        <p class="mt-2 text-sm text-slate-400">
+          Información en tiempo real desde <span class="text-white">/api/Vehicle</span>.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a class="btn-secondary" routerLink="/booking">Ir a reservas</a>
+        <a class="btn-primary" routerLink="/booking">Reservar</a>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-[280px_1fr]">
+      <aside class="card h-fit space-y-6 p-6">
+        <div>
+          <p class="text-sm font-semibold text-white">Tipo de vehículo</p>
+          <select class="select mt-3" [(ngModel)]="selectedTypeId">
+            <option [ngValue]="'all'">Todos</option>
+            <option *ngFor="let type of vehicleTypes()" [ngValue]="type.id">
+              {{ type.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-white">Sucursal</p>
+          <select class="select mt-3" [(ngModel)]="selectedBranchId">
+            <option [ngValue]="'all'">Todas</option>
+            <option *ngFor="let branch of branches()" [ngValue]="branch.id">
+              {{ branch.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-white">Estado</p>
+          <select class="select mt-3" [(ngModel)]="selectedStatus">
+            <option [ngValue]="'all'">Todos</option>
+            <option *ngFor="let option of statusOptions" [ngValue]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+      </aside>
+
+      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <article *ngFor="let vehicle of filteredVehicles" class="card card-hover p-5">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>{{ vehicle.typeName }}</span>
+            <span class="badge">{{ getStatusLabel(vehicle.status) }}</span>
+          </div>
+          <h3 class="mt-2 text-lg font-semibold text-white">{{ vehicle.model }}</h3>
+          <p class="text-sm text-slate-400">Placa {{ vehicle.plate }} · {{ vehicle.year }}</p>
+          <div class="mt-3 text-xs text-slate-400">Sucursal: {{ vehicle.branchName }}</div>
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-base font-semibold text-white">
+              {{ vehicle.pricePerDay !== null ? (vehicle.pricePerDay | currency: 'USD') : 'Sin tarifa' }}
+            </span>
+            <a class="btn-secondary text-xs" [routerLink]="['/vehicles', vehicle.id]">Ver detalle</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #loading>
+  <section class="container-shell">
+    <div class="card p-6 text-sm text-slate-400">Cargando catálogo desde el backend...</div>
+  </section>
+</ng-template>
+
+<ng-template #errorState>
+  <section class="container-shell">
+    <div class="card p-6 text-sm text-red-300">{{ errorMessage() }}</div>
+  </section>
+</ng-template>

@@ -1,57 +1,66 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html {
-  height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+:root {
+  color-scheme: dark;
 }
 
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+  }
 
-  // Reset the user agent margin.
-  margin: 0;
-  height: 100%;
+  a {
+    @apply text-slate-200 transition;
+  }
 }
 
-.snack-success { 
-  --mdc-snackbar-container-color: #2e7d32; 
-  --mdc-snackbar-supporting-text-color: white; 
-  --mat-snack-bar-button-color: white; 
-} 
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-6xl px-4;
+  }
 
-.snack-error { 
-  --mdc-snackbar-container-color: #c62828; 
-  --mdc-snackbar-supporting-text-color: white; 
-  --mat-snack-bar-button-color: white; 
-} 
+  .card {
+    @apply rounded-2xl border border-white/10 bg-slate-900/70 shadow-lg;
+  }
 
-.snack-info { 
-  --mdc-snackbar-container-color: #1976d2; 
-  --mdc-snackbar-supporting-text-color: white; 
-  --mat-snack-bar-button-color: white; 
-} 
-/* You can add global styles to this file, and also import other style files */
+  .card-hover {
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-2xl;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none ring-brand-500/40 focus:ring-2;
+  }
+
+  .select {
+    @apply w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none ring-brand-500/40 focus:ring-2;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-400 active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 transition hover:bg-white/10 active:scale-[0.98];
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-slate-200;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold text-white md:text-3xl;
+  }
+
+  .section-subtitle {
+    @apply text-sm text-slate-400 md:text-base;
+  }
+}
