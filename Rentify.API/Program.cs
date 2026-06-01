@@ -11,6 +11,8 @@ using System.ComponentModel.Design;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://localhost:5239");
+
 // ── Entity Framework Core ──
 builder.Services.AddDbContext<RentifyDbContext>(options =>
  options.UseSqlServer(
@@ -20,7 +22,7 @@ builder.Services.AddDbContext<RentifyDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>),
 typeof(GenericRepository<>));
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>(); 
+builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 builder.Services.AddScoped<IVehicleMaintenanceRepository, VehicleMaintenanceRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
@@ -36,6 +38,9 @@ builder.Services.AddScoped<IVehicleTypeService, VehicleTypeService>();
 builder.Services.AddScoped<IVehicleMaintenanceService, VehicleMaintenanceService>();
 builder.Services.AddScoped<IRentalServices, RentalServices>();
 builder.Services.AddScoped<IPaymentServices, PaymentServices>();
+
+// Background worker to update rental statuses (implemented in Domain.Services)
+builder.Services.AddHostedService<Rentify.Domain.Services.RentalStatusWorker>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
