@@ -11,9 +11,11 @@ namespace Rentify.Domain.Services
     public class RentalServices : IRentalServices
     {
         private readonly IRentalRepository _rep;
-        public RentalServices(IRentalRepository rep)
+        private readonly IVehicleService _vehicleService;
+        public RentalServices(IRentalRepository rep, IVehicleService vehicleService)
         {
             _rep = rep;
+            _vehicleService = vehicleService;
         }
         public async Task<Rental> CreateAsync(Rental entity, string paymentMethod)
         {
@@ -24,6 +26,11 @@ namespace Rentify.Domain.Services
             }
             int days = (entity.EndDate - entity.StartDate).Days;
             entity.TotalCost = days * entity.Vehicle.VehicleType.PricePerDay;
+
+            // New rentals are created as Pending. Vehicle status will be updated
+            // when the rental becomes Active (e.g., at start time).
+            entity.Status = RentalStatus.Pending;
+
             var payment = new Payment
             {
                 Amount = entity.TotalCost,
@@ -31,6 +38,7 @@ namespace Rentify.Domain.Services
                 RentalId = entity.Id,
             };
             entity.Payment = payment;
+
             return await _rep.CreateAsync(entity);
         }
 

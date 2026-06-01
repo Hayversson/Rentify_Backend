@@ -57,7 +57,7 @@
             <label class="text-xs text-slate-400">Vehículo</label>
             <select class="select mt-2" formControlName="vehicleId">
               <option value="">Selecciona un vehículo</option>
-              <option *ngFor="let vehicle of vehicles()" [value]="vehicle.id">
+              <option *ngFor="let vehicle of getFilteredVehicles()" [value]="vehicle.id">
                 {{ vehicle.model }} · {{ vehicle.plate }} ({{ vehicle.year }})
               </option>
             </select>
@@ -67,7 +67,7 @@
               <label class="text-xs text-slate-400">Sucursal de recogida</label>
               <select class="select mt-2" formControlName="pickupBranchId">
                 <option value="">Selecciona sucursal</option>
-                <option *ngFor="let branch of branches()" [value]="branch.id">
+                <option *ngFor="let branch of getAvailableBranches()" [value]="branch.id">
                   {{ branch.name }} · {{ branch.city }}
                 </option>
               </select>
@@ -76,7 +76,7 @@
               <label class="text-xs text-slate-400">Sucursal de devolución</label>
               <select class="select mt-2" formControlName="returnBranchId">
                 <option value="">Selecciona sucursal</option>
-                <option *ngFor="let branch of branches()" [value]="branch.id">
+                <option *ngFor="let branch of getAvailableBranches()" [value]="branch.id">
                   {{ branch.name }} · {{ branch.city }}
                 </option>
               </select>

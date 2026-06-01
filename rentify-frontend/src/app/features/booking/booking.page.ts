@@ -8,6 +8,7 @@ import { Customer } from '../../core/models/customer.model';
 import { RentalRequest } from '../../core/models/rental.model';
 import { VehicleType } from '../../core/models/vehicle-type.model';
 import { Vehicle } from '../../core/models/vehicle.model';
+import { VehicleStatus } from '../../core/models/status.model';
 import { BranchesService } from '../../core/services/branches.service';
 import { CustomersService } from '../../core/services/customers.service';
 import { RentalsService } from '../../core/services/rentals.service';
@@ -32,6 +33,7 @@ export class BookingPageComponent implements OnInit {
   protected readonly customers = signal<Customer[]>([]);
   protected readonly vehicles = signal<Vehicle[]>([]);
   protected readonly branches = signal<Branch[]>([]);
+  protected readonly selectedVehicleBranch = signal<Branch | null>(null);
   protected readonly vehicleTypes = signal<VehicleType[]>([]);
   protected readonly isLoading = signal(true);
   protected readonly errorMessage = signal<string | null>(null);
@@ -60,6 +62,29 @@ export class BookingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.form.get('vehicleId')?.valueChanges.subscribe((selectedVehicleIdRaw) => {
+      const selectedVehicleId = typeof selectedVehicleIdRaw === 'string' && selectedVehicleIdRaw !== ''
+        ? Number(selectedVehicleIdRaw)
+        : selectedVehicleIdRaw;
+
+      const selectedVehicle = this.vehicles().find((vehicle) => vehicle.id === selectedVehicleId);
+      const branch = selectedVehicle ? this.branches().find((item) => item.id === selectedVehicle.branchId) ?? null : null;
+
+      this.selectedVehicleBranch.set(branch);
+
+      if (selectedVehicle) {
+        this.form.patchValue({
+          pickupBranchId: selectedVehicle.branchId,
+          returnBranchId: selectedVehicle.branchId
+        }, { emitEvent: false });
+      } else {
+        this.form.patchValue({
+          pickupBranchId: null,
+          returnBranchId: null
+        }, { emitEvent: false });
+      }
+    });
+
     forkJoin({
       customers: this.customersService.getCustomers(),
       vehicles: this.vehiclesService.getVehicles(),
@@ -158,13 +183,51 @@ export class BookingPageComponent implements OnInit {
     });
   }
 
+  private getSelectedVehicle(): Vehicle | null {
+    const vehicleIdRaw = this.form.get('vehicleId')?.value;
+    const vehicleId = typeof vehicleIdRaw === 'string' && vehicleIdRaw !== ''
+      ? Number(vehicleIdRaw)
+      : vehicleIdRaw;
+
+    if (vehicleId == null) {
+      return null;
+    }
+
+    return this.vehicles().find((item) => item.id === vehicleId) ?? null;
+  }
+
   getSelectedVehicleType(): VehicleType | null {
-    const vehicleId = this.form.get('vehicleId')?.value;
-    const vehicle = this.vehicles().find((item) => item.id === vehicleId);
+    const vehicle = this.getSelectedVehicle();
     if (!vehicle) {
       return null;
     }
     return this.vehicleTypes().find((type) => type.id === vehicle.vehicleTypeId) ?? null;
+  }
+
+  getFilteredVehicles(): Vehicle[] {
+    const pickupBranchIdRaw = this.form.get('pickupBranchId')?.value;
+    const pickupBranchId = typeof pickupBranchIdRaw === 'string'
+      ? pickupBranchIdRaw === ''
+        ? null
+        : Number(pickupBranchIdRaw)
+      : pickupBranchIdRaw;
+
+    const isBranchSelected = pickupBranchId !== null && pickupBranchId !== undefined;
+
+    return this.vehicles().filter((vehicle) => {
+      const vehicleStatus = typeof vehicle.status === 'string'
+        ? VehicleStatus[vehicle.status as keyof typeof VehicleStatus]
+        : vehicle.status;
+
+      const isAvailable = vehicleStatus === VehicleStatus.Available;
+      const matchesBranch = !isBranchSelected || vehicle.branchId === pickupBranchId;
+      return isAvailable && matchesBranch;
+    });
+  }
+
+  getAvailableBranches(): Branch[] {
+    const selectedBranch = this.selectedVehicleBranch();
+    return selectedBranch ? [selectedBranch] : this.branches();
   }
 
   getEstimatedTotal(): number | null {

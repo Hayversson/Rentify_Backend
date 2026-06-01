@@ -14,6 +14,7 @@ import { VehiclesService } from '../../core/services/vehicles.service';
 
 interface RentalView {
   id: number;
+  vehicleId: number;
   vehicleLabel: string;
   period: string;
   status: RentalStatus;
@@ -76,7 +77,18 @@ export class ProfileHistoryPageComponent implements OnInit {
     this.errorMessage.set(null);
     this.rentalsService.getRentalsByCustomer(customerId).subscribe({
       next: (rentals) => {
-        this.rentals.set(rentals.map((rental) => this.toRentalView(rental)));
+        // Map to view models first
+        const views = (rentals ?? [])
+          .filter((r) => !!r)
+          .map((r) => this.toRentalView(r as Rental));
+
+        // Deduplicate by id on the final view models to ensure unique display
+        const viewMap = new Map<number, RentalView>();
+        for (const v of views) {
+          if (!viewMap.has(v.id)) viewMap.set(v.id, v);
+        }
+
+        this.rentals.set(Array.from(viewMap.values()));
         this.isLoading.set(false);
       },
       error: () => {
@@ -108,29 +120,58 @@ export class ProfileHistoryPageComponent implements OnInit {
   }
 
   get activeRentals(): RentalView[] {
-    return this.rentals().filter((rental) =>
+    // Deduplicate active listings by vehicleId. If both Pending and Active exist for same vehicle,
+    // prefer Pending (so the pending reservation hides the active one).
+    const active = this.rentals().filter((rental) =>
       [RentalStatus.Pending, RentalStatus.Active].includes(rental.status)
     );
+
+    const byVehicle = new Map<number, RentalView>();
+    for (const r of active) {
+      const existing = byVehicle.get(r.vehicleId);
+      if (!existing) {
+        byVehicle.set(r.vehicleId, r);
+        continue;
+      }
+      // If there's a conflict, prefer Pending over Active
+      if (existing.status === RentalStatus.Active && r.status === RentalStatus.Pending) {
+        byVehicle.set(r.vehicleId, r);
+      }
+      // Otherwise keep existing (e.g., both Pending or existing is Pending)
+    }
+
+    return Array.from(byVehicle.values());
   }
 
   get pastRentals(): RentalView[] {
-    return this.rentals().filter((rental) =>
+    const past = this.rentals().filter((rental) =>
       [RentalStatus.Completed, RentalStatus.Cancelled].includes(rental.status)
     );
+    const map = new Map<number, RentalView>();
+    for (const r of past) {
+      if (!map.has(r.id)) map.set(r.id, r);
+    }
+    return Array.from(map.values());
   }
 
   private toRentalView(rental: Rental): RentalView {
     const vehicle = this.vehicles().find((item) => item.id === rental.vehicleId);
     const pickupBranch = this.branches().find((item) => item.id === rental.pickupBranchId);
     const returnBranch = this.branches().find((item) => item.id === rental.returnBranchId);
+    // If rental has passed its end date and is not cancelled, treat it as Completed for display
+    const now = new Date();
+    const end = new Date(rental.endDate);
+    let displayStatus = rental.status;
+    if (rental.status !== RentalStatus.Cancelled && end < now) {
+      displayStatus = RentalStatus.Completed;
+    }
 
     return {
       id: rental.id,
+      vehicleId: rental.vehicleId,
       vehicleLabel: vehicle ? `${vehicle.model} · ${vehicle.plate}` : `Vehículo ${rental.vehicleId}`,
-      period: `${new Date(rental.startDate).toLocaleDateString()} · ${new Date(
-        rental.endDate
-      ).toLocaleDateString()}`,
-      status: rental.status,
+      period: `${new Date(rental.startDate).toLocaleDateString()} · ${end.toLocaleDateString()}`,
+      status: displayStatus,
       totalCost: rental.totalCost,
       pickupBranch: pickupBranch?.name ?? 'Sucursal no disponible',
       returnBranch: returnBranch?.name ?? 'Sucursal no disponible'
