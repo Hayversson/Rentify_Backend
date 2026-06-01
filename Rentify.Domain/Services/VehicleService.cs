@@ -39,7 +39,10 @@ namespace Rentify.Domain.Services
             _logger.LogInformation("Retrieving Vehicle with ID: {VehicleId}", id);
             var vehicle = await _vehicleRepository.GetByIdAsync(id);
             if (vehicle == null)
-               _logger.LogWarning("Vehicle with ID {VehicleId} not found.", id);
+            {
+                _logger.LogWarning("Vehicle with ID {VehicleId} not found.", id);
+                throw new KeyNotFoundException($"Vehicle with ID {id} not found.");
+            }
             
             return vehicle;
         }
@@ -191,5 +194,17 @@ namespace Rentify.Domain.Services
             return await _vehicleRepository.GetByStatusAsync(status);
         }
         #endregion
+
+        public async Task<Vehicle?> GetByIdWithVehicleTypeAndMaintenanceAsync(int id)
+        {
+            var vehicle = await _vehicleRepository.GetByIdWithVehicleTypeAndMaintenanceAsync(id);
+            if (vehicle == null)
+            {
+                _logger.LogWarning("Vehicle with ID {VehicleId} not found.", id);
+                throw new KeyNotFoundException($"Vehicle with ID {id} not found.");
+            }
+            
+            return vehicle;
+        }
     }
 }

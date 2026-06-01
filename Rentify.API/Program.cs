@@ -24,6 +24,8 @@ builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 builder.Services.AddScoped<IVehicleMaintenanceRepository, VehicleMaintenanceRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 // ── Services ──
@@ -32,6 +34,8 @@ builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleTypeService, VehicleTypeService>();
 builder.Services.AddScoped<IVehicleMaintenanceService, VehicleMaintenanceService>();
+builder.Services.AddScoped<IRentalServices, RentalServices>();
+builder.Services.AddScoped<IPaymentServices, PaymentServices>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -43,16 +47,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // ── Data Seeder ──
-using (var scope = app.Services.CreateScope()) //Scoped, singleton y transient
+using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider
-        .GetRequiredService<RentifyDbContext>();
-
-    await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
-    await DataSeeder.SeedAsync(context);
+    var context = scope.ServiceProvider.GetRequiredService<RentifyDbContext>();
+    await context.Database.MigrateAsync(); // Aplica las migraciones
+    await DataSeeder.SeedAsync(context);   // Inserta los datos
 }
 
 
@@ -66,6 +78,7 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngular");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -1,3 +1,5 @@
+using Rentify.Domain.Entities;
+
 namespace Rentify.API.DTOs.Response
 {
     public class CustomerResponseDTO
@@ -9,5 +11,6 @@ namespace Rentify.API.DTOs.Response
         public string Phone { get; set; } = string.Empty;
         public string LicenseNumber { get; set; } = string.Empty;
         public DateTime LicenseExpirationDate { get; set; }
+        public ICollection<RentalResponseDTO>? Rentals { get; set; }
     }
 }
