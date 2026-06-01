@@ -16,12 +16,9 @@ namespace Rentify.DataAccess.Repositories
         }
         public async Task<IEnumerable<Rental?>> GetByCustomerAsync(int customerId)
         {
-            if (!await ExistsAsync(customerId))
-            {
-                throw new KeyNotFoundException($"Customer with ID {customerId} not found.");
-            }
+            // Do not use ExistsAsync here (it checks Rentals by id). Return empty list if none.
             var rentals = await _dbSet.Where(c => c.CustomerId == customerId).ToListAsync();
-            return rentals;
+            return rentals ?? Enumerable.Empty<Rental?>();
         }
         public async Task UpdateStatusAsync(int id, RentalStatus newStatus)
         {
@@ -47,12 +44,9 @@ namespace Rentify.DataAccess.Repositories
 
         public async Task<IEnumerable<Rental?>> GetByVehiculeAsync(int vehicleId)
         {
-            if (!await ExistsAsync(vehicleId))
-            {
-                throw new KeyNotFoundException($"Vehicle with ID {vehicleId} not found.");
-            }
+            // Do not use ExistsAsync here (it checks Rentals by id). Return empty list if none.
             var rentals = await _dbSet.Where(c => c.VehicleId == vehicleId).ToListAsync();
-            return rentals;
+            return rentals ?? Enumerable.Empty<Rental?>();
         }
     }
 }

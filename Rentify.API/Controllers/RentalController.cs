@@ -72,8 +72,13 @@ namespace Rentify.API.Controllers
                     return BadRequest("Rental data is required.");
                 }
                 var entity = _map.Map<Rental>(dto);
-                entity.Status = 0;
-                entity.Vehicle = await _veh.GetByIdWithVehicleTypeAndMaintenanceAsync(dto.VehicleId);
+                var vehicle = await _veh.GetByIdWithVehicleTypeAndMaintenanceAsync(dto.VehicleId);
+                if (vehicle == null)
+                {
+                    _log.LogWarning("Vehicle with id {VehicleId} was not found.", dto.VehicleId);
+                    return BadRequest("Vehicle not found.");
+                }
+                entity.Vehicle = vehicle;
 
                 await _rental.CreateAsync(entity, paymentMethod);
 
@@ -195,3 +200,8 @@ namespace Rentify.API.Controllers
         }
     }
 }
+
+
+
+
+
